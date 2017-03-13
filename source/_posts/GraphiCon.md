@@ -16,9 +16,10 @@ GraphiCon的po主们虽然遍布天涯海角，在从事着不同的事，但都
 我们的第一篇将会说说我们的Logo的故事！敬请期待！
 
 请毫不犹豫地关注我们：
+我们的网站：https://graphicon.io
+知乎专栏：[GraphiCon图形控](https://zhuanlan.zhihu.com/graphicon)
 公众号：GraphiCon
 ![qrcode_GraphiCon.jpg](https://ooo.0o0.ooo/2017/03/13/58c5eab345ef3.jpg)
-知乎专栏：[GraphiCon图形控](https://zhuanlan.zhihu.com/graphicon)
 如果你有什么想法，建议，或者想加入我们，你可以：
 给我们发邮件：[hi@graphicon.io](mailto:hi@graphicon.io)
 加入我们的QQ群：SIQGRAPH（342086343）
