@@ -14,7 +14,8 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://graphicon.io
 root: /
-permalink: :year/:month/:day/:title/
+# permalink: :year/:month/:day/:title/
+permalink: :title/
 permalink_defaults:
 
 # Directory
@@ -70,3 +71,18 @@ theme: apollo
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type:
+
+robotstxt:
+  useragent: "*"
+  disallow:
+    - /vendors/
+    - /js/
+    - /css/
+    - /fonts/
+    - /vendors/
+    - /fancybox/
+  allow:
+    - /
+    - /archives/
+    - /about/
+  sitemap: /sitemap.xml
