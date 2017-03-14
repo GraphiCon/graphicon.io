@@ -16,7 +16,7 @@ tags:
 有这个想法也不是我们哪天突然开了个脑洞想出来的。其实在神书「哥德尔、艾舍尔、巴赫:集异璧之大成」的封面上就出现过这种效果，图中这个几何形状从3个方向看分别投影出G（Gödel），E（Escher）和B（Bach）3个字母。
 ![GEB.jpg](https://ooo.0o0.ooo/2017/03/14/58c6ef95c06ac.jpg)
 
-这时候问题就来了，这样的几何形状怎么设计呢？还真有人想过这个事，2009年，现在都已经成为超级大牛的Niloy Mitra和Mark Pauly就发了这样一篇文章，名叫Shadow Art[[1]](#references)，从几何处理的角度解决了这个问题。
+这时候问题就来了，这时候问题就来了，**假如我们给出三个方向的影子作为输入，怎么生成这样一个几何形状呢？**还真有人想过这个事，2009年，现在都已经成为超级大牛的Niloy Mitra和Mark Pauly就发了这样一篇文章，名叫Shadow Art[[1]](#references)，从几何处理的角度解决了这个问题。
 
 我们先从头来看，这问题真的很难吗？拿三幅图在三个角度投个影求个交不就完事了？事实是这样吗？我们来试试！
 
@@ -69,6 +69,8 @@ Done！
 [2]: [Shadow Theatre: Discovering Human Motion from a Sequence of Silhouettes](http://mrl.snu.ac.kr/research/ProjectShadowTheatre/ShadowTheatre.htm); Jungdam Won, Jehee Lee; SIGGRAPH 2016.
 [3]: [3D Modeling with Silhouettes](http://www.alecrivers.com/3dmodelingwithsilhouettes/); Alec Rivers, Frédo Durand, Takeo Igarashi; SIGGRAPH 2010.
 
+\_(:3」∠)\_ \_(・ω・”∠)\_ \_(:з)∠)\_ ∠( ᐛ 」∠)＿ \_(:зゝ∠)\_
+GrapiCon图形控:有趣的图形学
 请毫不犹豫地关注我们：
 我们的网站：[https://graphicon.io](https://graphicon.io)
 知乎专栏：[GraphiCon图形控](https://zhuanlan.zhihu.com/graphicon)
