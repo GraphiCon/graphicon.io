@@ -75,7 +75,7 @@ GrapiCon图形控:有趣的图形学
 我们的网站：[https://graphicon.io](https://graphicon.io)
 知乎专栏：[GraphiCon图形控](https://zhuanlan.zhihu.com/graphicon)
 公众号：GraphiCon
-![qr code](https://ooo.0o0.ooo/2017/03/12/58c52755a9463.jpg)
+![qr code](https://ooo.0o0.ooo/2017/03/14/58c7de193d7ac.png)
 如果你有什么想法，建议，或者想加入我们，你可以：
 给我们发邮件：[hi@graphicon.io](mailto:hi@graphicon.io)
 加入我们的QQ群：SIQGRAPH（342086343）

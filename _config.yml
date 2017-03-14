@@ -14,7 +14,10 @@ timezone:
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
 url: https://graphicon.io
 root: /
+<<<<<<< HEAD
 # permalink: :year/:month/:day/:title/
+=======
+>>>>>>> master
 permalink: :title/
 permalink_defaults:
 
@@ -63,6 +66,8 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
+plugins:
+  - hexo-generator-robotstxt
 ## Themes: https://hexo.io/themes/
 theme: apollo
 # theme: landscape
@@ -83,6 +88,8 @@ robotstxt:
     - /fancybox/
   allow:
     - /
-    - /archives/
     - /about/
+    - /archives/
+    - /tags/
+    - /categories/
   sitemap: /sitemap.xml
