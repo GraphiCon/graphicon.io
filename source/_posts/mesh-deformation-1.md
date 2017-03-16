@@ -28,7 +28,9 @@ tags:
 
 该算法通过在满足用户设置的部分离散点新位置的情况下，最小化一个表征编辑前后模型表面细节差异的函数来求出新模型各离散点的位置，并由原有的连接构成新的triangle mesh。这种解决问题的方法叫做**数学优化**，我们在高中时学的求一元实函数的最值问题就是它的最简单的形式。这里我们的函数有$3n$个自变量（$n$为离散点个数，常见的从几百到上十万不等，每个离散点都定义在三维空间），属于多元函数，所以优化它还需要用到**线性代数**和**多元微积分**的知识。
 
-对每一个离散点$x_i \in R^3$，其细节信息可以用定义在triangle mesh上的离散拉普拉斯算子（discrete Laplacian operator）来描述，即连接$x_i$到与$x_i$相连的所有离散点$x_j$，$j \in N(i)$的中心位置的向量$l_i = \sum_j^{N(i)}w_{ij}x_j - x_i$（如下图c）。这里算子中的权重$w_{ij}$可以是均匀权重，或者[cotangent权重](https://zhuanlan.zhihu.com/p/25496167)：$w_{ij} \propto \frac{1}{2}(\cot \alpha_j + \cot \beta_j)$（如下图b），且 $\sum_j^{N(i)}w_{ij} = 1$ [[Desbrun et al. 1999]](http://w.multires.caltech.edu/pubs/ImplicitFairing.pdf)。后者考虑到了离散采样点分布的不均匀性，能更好的描述该处的细节信息。
+$\alpha$
+
+对每一个离散点$x_i \in R^3$，其细节信息可以用定义在triangle mesh上的离散拉普拉斯算子（discrete Laplacian operator）来描述，即连接$x_i$到与$x_i$相连的所有离散点$x_j$，$j \in N(i)$的中心位置的向量$l_i=\sum_{j}^{N(i)}w_{ij}x_{j}-x_{i}$（如下图c）。这里算子中的权重$w_{ij}$可以是均匀权重，或者[cotangent权重](https://zhuanlan.zhihu.com/p/25496167)：$w_{ij} \propto \frac{1}{2}(\cot \alpha_j + \cot \beta_j)$（如下图b），且 $\sum_j^{N(i)}w_{ij} = 1$ [[Desbrun et al. 1999]](http://w.multires.caltech.edu/pubs/ImplicitFairing.pdf)。后者考虑到了离散采样点分布的不均匀性，能更好的描述该处的细节信息。
 
 ![discreteLap.png](https://ooo.0o0.ooo/2017/03/10/58c196af20e2d.png)
 
