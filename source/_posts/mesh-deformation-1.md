@@ -28,9 +28,8 @@ tags:
 
 该算法通过在满足用户设置的部分离散点新位置的情况下，最小化一个表征编辑前后模型表面细节差异的函数来求出新模型各离散点的位置，并由原有的连接构成新的triangle mesh。这种解决问题的方法叫做**数学优化**，我们在高中时学的求一元实函数的最值问题就是它的最简单的形式。这里我们的函数有$3n$个自变量（$n$为离散点个数，常见的从几百到上十万不等，每个离散点都定义在三维空间），属于多元函数，所以优化它还需要用到**线性代数**和**多元微积分**的知识。
 
-$\alpha$
-
-对每一个离散点$x_i \in R^3$，其细节信息可以用定义在triangle mesh上的离散拉普拉斯算子（discrete Laplacian operator）来描述，即连接$x_i$到与$x_i$相连的所有离散点$x_j$，$j \in N(i)$的中心位置的向量 $l_i= \sum_{j}^{N(i)} w_{ij} x_{j}-x_{i}$ （如下图c）。这里算子中的权重$w_{ij}$可以是均匀权重，或者[cotangent权重](https://zhuanlan.zhihu.com/p/25496167)：$w_{ij} \propto \frac{1}{2}(\cot \alpha_j + \cot \beta_j)$（如下图b），且 $\sum_j^{N(i)}w_{ij} = 1$ [[Desbrun et al. 1999]](http://w.multires.caltech.edu/pubs/ImplicitFairing.pdf)。后者考虑到了离散采样点分布的不均匀性，能更好的描述该处的细节信息。
+对每一个离散点$x\_i \in R^3$，其细节信息可以用定义在triangle mesh上的离散拉普拉斯算子（discrete Laplacian operator）来描述，即连接$x\_i$到与$x\_i$相连的所有离散点$x\_j$，$j \in N(i)$的中心位置的向量 $l\_i= \sum\_{j}^{N(i)} w\_{ij} x\_{j}-x\_{i}$ （如下图c）。
+这里算子中的权重$w\_{ij}$可以是均匀权重，或者[cotangent权重](https://zhuanlan.zhihu.com/p/25496167)：$w\_{ij} \propto \frac{1}{2}(\cot \alpha\_j + \cot \beta\_j)$（如下图b），且 $\sum\_j^{N(i)}w\_{ij} = 1$ [[Desbrun et al. 1999]](http://w.multires.caltech.edu/pubs/ImplicitFairing.pdf)。后者考虑到了离散采样点分布的不均匀性，能更好的描述该处的细节信息。
 
 ![discreteLap.png](https://ooo.0o0.ooo/2017/03/10/58c196af20e2d.png)
 
@@ -38,25 +37,25 @@ $\alpha$
 
 有了这个具有描述模型局部细节的算子，我们就可以写出需要最小化的目标函数了：
 
-$$f(x_1, x_2, ..., x_n) = \sum_{i=1}^n \| (\sum_j^{N(i)} w_{ij}x_j - x_i) - l'_i \|^2$$
+$$f(x\_1, x\_2, ..., x\_n) = \sum\_{i=1}^n \| (\sum\_j^{N(i)} w\_{ij}x\_j - x\_i) - l'\_i \|^2$$
 
-即最小化编辑前后模型间各对应点细节差异之和（这里$l'_i$为编辑前模型上点$i$处的discrete Laplacian，表示编辑前该点处的细节信息；向量间的差异用欧式距离度量）。同时还要注意用户输入的部分点所需满足的位置限定（position constraints）：
+即最小化编辑前后模型间各对应点细节差异之和（这里$l'\_i$为编辑前模型上点$i$处的discrete Laplacian，表示编辑前该点处的细节信息；向量间的差异用欧式距离度量）。同时还要注意用户输入的部分点所需满足的位置限定（position constraints）：
 
-$$x_k = p_k, k \in M$$
+$$x\_k = p\_k, k \in M$$
 
-其中$M$为用户所选定的预先限定位置的离散点所组成的集合，$p_k$为对点$k$所指定的位置。为了在满足position constraints的同时最小化函数$f$，在mesh deformation的情境中我们一般用penalty method把这一constrained optimization problem转化为unconstrained optimization problem，即定义新的目标函数：
+其中$M$为用户所选定的预先限定位置的离散点所组成的集合，$p\_k$为对点$k$所指定的位置。为了在满足position constraints的同时最小化函数$f$，在mesh deformation的情境中我们一般用penalty method把这一constrained optimization problem转化为unconstrained optimization problem，即定义新的目标函数：
 
-$$f_p(x_1, x_2, ..., x_n) = \sum_{i=1}^n \| (\sum_j^{N(i)} w_{ij}x_j - x_i) - l'_i \|^2 + \alpha\sum_{k \in M} \| x_k - p_k\|^2$$
+$$f\_p(x\_1, x\_2, ..., x\_n) = \sum\_{i=1}^n \| (\sum\_j^{N(i)} w\_{ij}x\_j - x\_i) - l'\_i \|^2 + \alpha\sum\_{k \in M} \| x\_k - p\_k\|^2$$
 
-其中$\alpha$为限制条件的严格程度，$\alpha$越大，条件将被满足得越好；当$\alpha$趋近于无穷时，条件将被严格满足。这样一来，优化$f_p$这个二次型就相当于在满足position constraints的情况下优化$f$了。由于二次型只有一个极值点（local optimum），所以这个极值点同时也是个最值点（global optimum），故可以直接令其梯度（gradient）为零以求出目标函数值最小时的自变量，也就是新模型各点的位置坐标。由于我们不希望强行以牺牲细节为代价去严格满足position constraints，故一般无需将$\alpha$设置太大，在$[1, 10]$区间内效果就不错。
+其中$\alpha$为限制条件的严格程度，$\alpha$越大，条件将被满足得越好；当$\alpha$趋近于无穷时，条件将被严格满足。这样一来，优化$f\_p$这个二次型就相当于在满足position constraints的情况下优化$f$了。由于二次型只有一个极值点（local optimum），所以这个极值点同时也是个最值点（global optimum），故可以直接令其梯度（gradient）为零以求出目标函数值最小时的自变量，也就是新模型各点的位置坐标。由于我们不希望强行以牺牲细节为代价去严格满足position constraints，故一般无需将$\alpha$设置太大，在$[1, 10]$区间内效果就不错。
 
-*\*注2：当需要在一个数学优化问题中严格地满足一个等式限定条件（equality constraints）时，通常还可采用拉格朗日乘子法（Lagrange Multipliers）将它转化成一个unconstrained问题求解。如果限定条件由不等式定义，则可考虑barrier method或Interior point method。详见[convex optimization [Boyd and Vandenberghe 2004]](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf)。*
+*\*注2：当需要在一个数学优化问题中严格地满足一个等式限定条件（equality constraints）时，通常还可采用拉格朗日乘子法（Lagrange Multipliers）将它转化成一个unconstrained问题求解。如果限定条件由不等式定义，则可考虑barrier method或Interior point method。详见[convex optimization [Boyd and Vandenberghe 2004]](https://web.stanford.edu/~boyd/cvxbook/bv\_cvxbook.pdf)。*
 
-前文提到的线性代数和多元微积分在这里的作用就是指导对多元函数的各种操作，比如$f_p$其实可以用矩阵的形式写成：
+前文提到的线性代数和多元微积分在这里的作用就是指导对多元函数的各种操作，比如$f\_p$其实可以用矩阵的形式写成：
 
-$$f_p(x) = \|Lx - l'\|^2 + \alpha \| Sx - p \|^2$$
+$$f\_p(x) = \|Lx - l'\|^2 + \alpha \| Sx - p \|^2$$
 
-也就是一个Linear least squares。于是其梯度可以写成$g_p(x) = 2(L^TLx - L^T l') + 2\alpha (S^TSx - S^Tp)$，那么问题就由此转化成了求解$x$，使得$g_p(x) = 0$，即求解线性方程组：
+也就是一个Linear least squares。于是其梯度可以写成$g\_p(x) = 2(L^TLx - L^T l') + 2\alpha (S^TSx - S^Tp)$，那么问题就由此转化成了求解$x$，使得$g\_p(x) = 0$，即求解线性方程组：
 
 $$(L^TL+\alpha S^TS)x = L^Tl' + \alpha S^Tp$$
 
@@ -84,19 +83,19 @@ $$(L^TL+\alpha S^TS)x = L^Tl' + \alpha S^Tp$$
 
 ![lapRot.png](https://ooo.0o0.ooo/2017/03/10/58c196afde4df.png)
 
-所以我们需要改进当前的目标函数，让它包含这种对旋转的容忍。假设我们想要的新模型上各点$x_i$局部相对于原始模型相应点$x'_i$局部之间的旋转关系为$R_il'_i=l_i$（这里$R_i$是一个$3\times3$的旋转矩阵），那么我们就可以很容易的把目标函数改写成：
+所以我们需要改进当前的目标函数，让它包含这种对旋转的容忍。假设我们想要的新模型上各点$x\_i$局部相对于原始模型相应点$x'\_i$局部之间的旋转关系为$R\_il'\_i=l\_i$（这里$R\_i$是一个$3\times3$的旋转矩阵），那么我们就可以很容易的把目标函数改写成：
 
-$$f_{pr}(x_1, x_2, ..., x_n, R_1, R_2, ..., R_n) = \sum_{i=1}^n \| (\sum_j^{N(i)} w_{ij}x_j - x_i) - R_il'_i \|^2 + \\ \alpha\sum_{k \in M} \| x_k - p_k\|^2$$
+$$f\_{pr}(x\_1, x\_2, ..., x\_n, R\_1, R\_2, ..., R\_n) = \sum\_{i=1}^n \| (\sum\_j^{N(i)} w\_{ij}x\_j - x\_i) - R\_il'\_i \|^2 + \\ \alpha\sum\_{k \in M} \| x\_k - p\_k\|^2$$
 
-以及对$R_i$必须是旋转矩阵的约束条件：
+以及对$R\_i$必须是旋转矩阵的约束条件：
 
-$$R_i^TR_i = I, det(R_i) = 1$$
+$$R\_i^TR\_i = I, det(R\_i) = 1$$
 
 这样就可以把上图a和b细节相同的考虑包含进来。至于上图c这种被扭曲反而不改变discrete Laplacian的情况，在对整个triangle mesh上的所有离散点同时求解时基本是不会出现的。虽然新的目标函数还是一个二次型，约束条件也还是等式，但这里的约束条件可不像之前的position constraints那么好对付了，因为这些constraints是nonlinear（非线性）的。即使再使用penalty method或者使用Lagrange Multipliers把问题转化为unconstrained problem，然后令其梯度等于零，得到的方程组也是非线性的，这使得我们之前用来求解线性方程组的工具都不够用，更别说如果这个非线性函数非凸（non-convex）的话，其极值点不一定都是最值点。
 
-*\*注4：一般解非线性问题常用的是gradient descent（梯度下降法），Newton's method（牛顿法）等几类hill climbing method和它们的变种（详见[convex optimization [Boyd and Vandenberghe 2004]](https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf)）。在工程应用中，人们时常也会想一些trick（比如change of variables、local/global）来绕过问题中的nonlinearity或间接对其求解。对于找到的极值点不一定是最值点的问题，有一种解决办法是去找到一个合适的自变量起始点（initial guess），从这个起始点开始优化目标函数，得到的极值点即使不是最值点也是在应用场景中可接受的结果。*
+*\*注4：一般解非线性问题常用的是gradient descent（梯度下降法），Newton's method（牛顿法）等几类hill climbing method和它们的变种（详见[convex optimization [Boyd and Vandenberghe 2004]](https://web.stanford.edu/~boyd/cvxbook/bv\_cvxbook.pdf)）。在工程应用中，人们时常也会想一些trick（比如change of variables、local/global）来绕过问题中的nonlinearity或间接对其求解。对于找到的极值点不一定是最值点的问题，有一种解决办法是去找到一个合适的自变量起始点（initial guess），从这个起始点开始优化目标函数，得到的极值点即使不是最值点也是在应用场景中可接受的结果。*
 
-为了保持求解的简洁性，[[Lipman et al. 2004]](https://igl.ethz.ch/projects/Laplacian-mesh-processing/Laplacian-mesh-editing/diffcoords-editing.pdf)根据优化$f_p$得到的初步结果将$R_i$估算出来，然后直接代入$f_{pr}$再次优化求出最终的解，得到的结果也就是之前那张章鱼示意图中的图c了。然而我们很容易注意到，虽然图c的小圆圈变得没有那么扭曲了，但它们还是和图a中原始模型上的小圆圈差别很大，并不自然，毕竟估算出的$R_i$不一定准确。所以，我们还是不得不直接去面对这个nonlinear optimization problem。不过此刻，让我们继续来欣赏一些这个简单可行的方法的更多结果吧：
+为了保持求解的简洁性，[[Lipman et al. 2004]](https://igl.ethz.ch/projects/Laplacian-mesh-processing/Laplacian-mesh-editing/diffcoords-editing.pdf)根据优化$f\_p$得到的初步结果将$R\_i$估算出来，然后直接代入$f\_{pr}$再次优化求出最终的解，得到的结果也就是之前那张章鱼示意图中的图c了。然而我们很容易注意到，虽然图c的小圆圈变得没有那么扭曲了，但它们还是和图a中原始模型上的小圆圈差别很大，并不自然，毕竟估算出的$R\_i$不一定准确。所以，我们还是不得不直接去面对这个nonlinear optimization problem。不过此刻，让我们继续来欣赏一些这个简单可行的方法的更多结果吧：
 
 ![moreResults.jpg](https://ooo.0o0.ooo/2017/03/16/58ca18a3b021d.jpg)
 
