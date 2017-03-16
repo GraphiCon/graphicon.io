@@ -1,16 +1,14 @@
 ---
-title: mesh-deformation-1
+title: 用数学编辑3D模型（一）- Mesh Deformation with Laplacian coordinates
 date: 2017-03-16 09:54:21
 tags:
 ---
 
 ![teaser.png](https://ooo.0o0.ooo/2017/03/10/58c196b927ffd.png)
 
-# 用数学编辑3D模型（一）- Mesh Deformation with Laplacian coordinates
-
-## 引言
-
 想必在我们之前的[“光影之下”系列第一篇“从Logo谈起”](https://zhuanlan.zhihu.com/p/25766738)中，大家已经隐约感受到了ARAP（as-rigid-as-possible）这个能够尽量保持局部形状不变的全局变形法的强大功能。那么作为文中提到的M神，今天，我暂时还不能给大家介绍ARAP算法。因为凡事需从基础开始，所以，今天先来谈一谈ARAP所基于的最基本的一种3D模型形变方法——Mesh Deformation with Laplacian coordinates。注意，前方高能（公式有点多）！
+
+<!--more-->
 
 ## 背景介绍
 
