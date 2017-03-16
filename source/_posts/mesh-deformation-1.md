@@ -30,7 +30,7 @@ tags:
 
 $\alpha$
 
-对每一个离散点$x_i \in R^3$，其细节信息可以用定义在triangle mesh上的离散拉普拉斯算子（discrete Laplacian operator）来描述，即连接$x_i$到与$x_i$相连的所有离散点$x_j$，$j \in N(i)$的中心位置的向量$l_i=\sum_{j}^{N(i)}w_{ij}x_{j}-x_{i}$（如下图c）。这里算子中的权重$w_{ij}$可以是均匀权重，或者[cotangent权重](https://zhuanlan.zhihu.com/p/25496167)：$w_{ij} \propto \frac{1}{2}(\cot \alpha_j + \cot \beta_j)$（如下图b），且 $\sum_j^{N(i)}w_{ij} = 1$ [[Desbrun et al. 1999]](http://w.multires.caltech.edu/pubs/ImplicitFairing.pdf)。后者考虑到了离散采样点分布的不均匀性，能更好的描述该处的细节信息。
+对每一个离散点$x_i \in R^3$，其细节信息可以用定义在triangle mesh上的离散拉普拉斯算子（discrete Laplacian operator）来描述，即连接$x_i$到与$x_i$相连的所有离散点$x_j$，$j \in N(i)$的中心位置的向量 $l_i= \sum_{j}^{N(i)} w_{ij} x_{j}-x_{i}$ （如下图c）。这里算子中的权重$w_{ij}$可以是均匀权重，或者[cotangent权重](https://zhuanlan.zhihu.com/p/25496167)：$w_{ij} \propto \frac{1}{2}(\cot \alpha_j + \cot \beta_j)$（如下图b），且 $\sum_j^{N(i)}w_{ij} = 1$ [[Desbrun et al. 1999]](http://w.multires.caltech.edu/pubs/ImplicitFairing.pdf)。后者考虑到了离散采样点分布的不均匀性，能更好的描述该处的细节信息。
 
 ![discreteLap.png](https://ooo.0o0.ooo/2017/03/10/58c196af20e2d.png)
 
