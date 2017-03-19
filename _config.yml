@@ -90,3 +90,6 @@ robotstxt:
     - /tags/
     - /categories/
   sitemap: /sitemap.xml
+
+  skip_render:
+    - config.yml
